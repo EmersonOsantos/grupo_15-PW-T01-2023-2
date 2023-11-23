@@ -15,30 +15,49 @@ const eventTitleInput = document.getElementById('eventTitleInput')
 const calendar = document.getElementById('calendar') // div calendar:
 const weekdays = ['domingo','segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'] //array with weekdays:
 
+
 //funções
 
 function openModal(date){
   clicked = date
+  //window.location.href = "event.html";
   const eventDay = events.find((event)=>event.date === clicked)
  
 
-  if (eventDay){
-   document.getElementById('eventText').innerText = eventDay.title
+ 
+    if(eventDay){
+      
+      addToScreen(clicked);
+     //document.getElementById("eventText");
+      
+
+   //document.getElementById('eventText').innerText = eventDay.title;
    deleteEventModal.style.display = 'block'
 
 
-  } else{
-    newEvent.style.display = 'block'
+   newEvent.style.display = 'block'
 
-  }
 
+
+ 
   backDrop.style.display = 'block'
+
+
+
+  } else{newEvent.style.display = 'block'}
+
+
 }
+
+
+
+
 
 //função load() será chamada quando a pagina carregar:
 
 function load (){ 
   const date = new Date() 
+
   
 
   //mudar titulo do mês:
@@ -94,10 +113,18 @@ function load (){
 
 
       if(eventDay){
-        const eventDiv = document.createElement('div')
-        eventDiv.classList.add('event')
-        eventDiv.innerText = eventDay.title
-        dayS.appendChild(eventDiv)
+        let n=events.length;
+ 
+
+        for(let i = 0;i<n;i++){
+          if(eventDay.date===events[i].date){
+              const eventDiv = document.createElement('div')
+              eventDiv.classList.add('event')
+              eventDiv.innerText = events[i].title
+              dayS.appendChild(eventDiv)
+          }
+        
+        }
 
       }
 
@@ -121,6 +148,7 @@ function closeModal(){
   eventTitleInput.value = ''
   clicked = null
   load()
+  location.reload(true)
 
 }
 function saveEvent(){
@@ -128,24 +156,99 @@ function saveEvent(){
     eventTitleInput.classList.remove('error')
 
     events.push({
+      id: new Date(),
+      title: eventTitleInput.value,
       date: clicked,
-      title: eventTitleInput.value
-    })
+      horario: eventHorarioInput.value,
+      local: eventLocalInput.value,
+      descricao: eventDescricaoInput.value,
+
+        })
 
     localStorage.setItem('events', JSON.stringify(events))
-    closeModal()
+   closeModal()
+    location.reload(true)
 
   }else{
     eventTitleInput.classList.add('error')
   }
 }
 
-function deleteEvent(){
+function deleteEvent(id){
 
-  events = events.filter(event => event.date !== clicked)
+  events = events.filter(event => event.id !== id)
   localStorage.setItem('events', JSON.stringify(events))
   closeModal()
+  location.reload(true)
 }
+
+
+
+
+
+
+function addToScreen(clicked) {
+    const orderedList = document.getElementById('eventText');
+
+    events.forEach(event => {
+        const li = document.createElement('li');
+
+
+        if(event.date === clicked){
+        
+        li.id = event.id;
+        li.addEventListener('click', () => {
+          //
+        })
+
+
+        const title = document.createElement('h2');
+        title.innerHTML = event.title;
+        li.appendChild(title);
+
+        const date = document.createElement('p');
+        date.innerHTML = formatDate(event.date)+ " <> "+event.horario;
+        li.appendChild(date);
+
+        const local = document.createElement('p');
+        local.innerHTML = "Local:  "+event.local;
+        li.appendChild(local);
+
+        const descricao = document.createElement('p');
+        descricao.innerHTML ="Descriçao:  " +event.descricao;
+        li.appendChild(descricao);
+
+        let e = event.id;
+        let t = event.title;
+        const deleteButton = document.createElement('button');
+        deleteButton.innerHTML = "Remover";
+        deleteButton.classList.add('outline', 'danger');
+        deleteButton.addEventListener('click', event => {
+            event.stopPropagation();
+            
+            const shouldRemove = confirm('Deseja remover o Evento ('+t+') ?');
+            if (shouldRemove) {
+             
+               deleteEvent(e);
+            }
+            
+        })
+        li.appendChild(deleteButton);  
+               
+        
+            orderedList.appendChild(li);
+
+           
+    }        
+    });
+
+   
+    
+}
+
+
+
+
 
 // botões 
 
@@ -166,7 +269,7 @@ function buttons (){
 
   document.getElementById('cancelButton').addEventListener('click',()=>closeModal())
 
-  document.getElementById('deleteButton').addEventListener('click', ()=>deleteEvent())
+ // document.getElementById('deleteButton').addEventListener('click', ()=>deleteEvent())
 
   document.getElementById('closeButton').addEventListener('click', ()=>closeModal())
   

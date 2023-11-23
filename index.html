@@ -1,78 +1,45 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<!doctype html>
+
+<html>
+
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- arquivos style -->
-  <link href="./style.css" rel="stylesheet">
-  <link href="./darkMode.css" rel="stylesheet">
-
-  <title>Calendario</title>
+    <title>Controle de gastos</title>
 </head>
-  <!-- dark mode -->
-  
-  <div class="toggle">
-    <input id="switch" type="checkbox" name="theme">
-    <label for="switch">Toggle</label>
-  </div>
 
-<!-- -------- -->
-
-<body>
-  <div id="container">
-      <div id="header">
-        <div id="monthDisplay"></div>
-
-        <div>
-          <button id="backButton">Voltar</button>
-          <button id="nextButton">Próximo</button>
+<body class="centralize">
+    <form>
+        <div class="form-field">
+            <div><label>Email</label></div>
+            <input type="email" name="email" id="email" placeholder="seu@email.com" onchange="onChangeEmail()"/>
+            <div class="error" id="email-required-error">Email é obrigatório</div>
+            <div class="error" id="email-invalid-error">Email é inválido</div>
         </div>
-          
-      </div>
-
-      <div id="weekdays">
-        <div>Domingo</div>
-        <div>Segunda-feira</div>
-        <div>Terça-feira</div>
-        <div>Quarta-feira</div>
-        <div>Quinta-feira</div>
-        <div>Sexta-feira</div>
-        <div>Sábado</div>
-      </div>
-
-
-      <!-- div dinamic -->
-      <div id="calendar" ></div>
-
-   
-  </div>
-
-  <div id="newEventModal">
-    <h2>Novo Evento</h2>
-
-    <input id="eventTitleInput" placeholder="Nome do Evento"/>
-
-    <button id="saveButton"> Salvar</button>
-    <button id="cancelButton">Cancelar</button>
-  </div>
-
-  <div id="deleteEventModal">
-    <h2>Evento</h2>
-
-    <div id="eventText"></div><br>
-
-
-    <button id="deleteButton">Deletar</button>
-    <button id="closeButton">Fechar</button>
-  </div>
-
-  <div id="modalBackDrop"></div>
-
-
-  <script src="./darkMode.js"></script>
-  <script src="./main.js"></script>
-  
+        <div class="form-field">
+            <div><label>Senha</label></div>
+            <input type="password" name="password" id="password" placeholder="Senha" onchange="onChangePassword()"/>
+            <div class="error" id="password-required-error">Senha é obrigatória</div>
+        </div>
+        <div>
+            <button type="button" class="clear" id="recover-password-button" onclick="recoverPassword()" disabled="true">Recuperar senha</button>
+        </div>
+        <div>
+            <button type="button" class="solid" id="login-button" disabled="true" onclick="login()">Entrar</button>
+        </div>
+        <div>
+            <button type="button" class="outline" onclick="register()">Registrar</button>
+        </div>
+    </form>
 </body>
+
+<link rel="stylesheet" href="index.css">
+<link rel="stylesheet" href="global.css">
+
+<script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
+<script src="firebase-init.js"></script>
+
+<script src="index.js"></script>
+<script src="validations.js"></script>
+<script src="loading.js"></script>
+
 </html>
